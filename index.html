@@ -44,15 +44,18 @@
                         <option value="inc" selected>+</option>
                         <option value="exp">-</option>
                     </select>
-                    <input type="text" class="add__description" placeholder="Add description">
-                    <input type="number" class="add__value" placeholder="Value">
-                    <button class="add__btn"><i class="ion-ios-checkmark-outline"></i></button>
+                    <input type="text" id = 'add__description' class="add__description" placeholder="Add description">
+                    <input type="number" id = add__value class="add__value" placeholder="Value">
+
+                    <button id="start-record-btn" title="Start Recording" class="add__btn1"><i class="ion-ios-mic"></i></button>
+                    <button id="pause-record-btn" title="Pause Recording" class="add__btn1"><i class="ion-ios-pause-outline"></i></button>
+                    <button id="add__btn" class="add__btn"><i class="ion-ios-checkmark-outline"></i></button>
                 </div>
             </div>
             
             <div class="container clearfix">
                 <div class="income">
-                    <h2 class="income__title">Income</h2>
+                    <h2 class="icome__title">Income</h2>
                     
                     <div class="income__list">
                        
@@ -62,7 +65,9 @@
                             <div class="right clearfix">
                                 <div class="item__value">+ 2,100.00</div>
                                 <div class="item__delete">
-                                    <button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button>
+                                    <button class="item__delete--btn">
+                                        <i class="ion-ios-close-outline"></i>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -99,6 +104,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="item clearfix" id="expense-1">
                             <div class="item__description">Grocery shopping</div>
                             <div class="right clearfix">
@@ -117,7 +123,8 @@
             
             
         </div>
-        
+        <script src="jquery-3.3.1.min.js"></script>
         <script src="app.js"></script>
+        <script src="script.js"></script>
     </body>
 </html>
