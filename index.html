@@ -12,7 +12,7 @@
         <div class="top">
             <div class="budget">
                 <div class="budget__title">
-                    Available Budget in <span class="budget__title--month">%Month%</span>:
+                    Available Budget in <span id="budget_title_month" class="budget__title--month">%Month%</span>:
                 </div>
                 
                 <div class="budget__value">+ 2,345.64</div>
@@ -44,15 +44,32 @@
                         <option value="inc" selected>+</option>
                         <option value="exp">-</option>
                     </select>
-                    <input type="text" class="add__description" placeholder="Add description">
-                    <input type="number" class="add__value" placeholder="Value">
+                    <input type="text"  name="description" class="add__description" placeholder="Add description">
+                    <input type="number" name="value" class="add__value" placeholder="Value">
+
                     <button class="add__btn"><i class="ion-ios-checkmark-outline"></i></button>
+                    
+                   <!--  <select class="add__type">
+                        <option  id = "german" value="German">German</option>
+                        <option value="Ukrainian"><img src="ukrainian.jpg" alt="Ukrainian"></option>
+                    </select>-->
+                    <button id="german" class="add__btn"><img src="germany.gif"  title="German" alt="German"></button>
+                    <button id="ukrainian" class="add__btn"><img src="ukrainian.jpg" title="Ukrainian" alt="Ukrainian"></button>
+                    <button id="english" class="add__btn"><img src="english.jpg" title="English" alt="English"></button> 
+                    <button id="russian" class="add__btn"><img src="russian.gif" title="Russian" alt="Russian"></button>
+                    <button id="italian" class="add__btn"><img src="italian.gif" title="Italian" alt="Italian"></button>
+                    <button id="french" class="add__btn"><img src="french.png"  title="French" alt="French"></button>
+                    <button id="spanish" class="add__btn"><img src="spanish.jpg"  title="Spanish" alt="Spanish"></button>
+                    <button id="chinese" class="add__btn"><img src="chinise.gif" title="Chinese" alt="Chinese"></button>
+                    
+
+
                 </div>
             </div>
             
             <div class="container clearfix">
                 <div class="income">
-                    <h2 class="income__title">Income</h2>
+                    <h2 class="icome__title">Income</h2>
                     
                     <div class="income__list">
                        
@@ -62,7 +79,9 @@
                             <div class="right clearfix">
                                 <div class="item__value">+ 2,100.00</div>
                                 <div class="item__delete">
-                                    <button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button>
+                                    <button class="item__delete--btn">
+                                        <i class="ion-ios-close-outline"></i>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -99,6 +118,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="item clearfix" id="expense-1">
                             <div class="item__description">Grocery shopping</div>
                             <div class="right clearfix">
