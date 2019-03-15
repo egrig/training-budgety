@@ -52,7 +52,6 @@ var budgetController = (function() {
         percentage: -1
     };
     
-    
     return {
         addItem: function(type, des, val) {
             var newItem, ID;
@@ -62,12 +61,14 @@ var budgetController = (function() {
             // ID = last ID + 1
             
             // Create new ID
-            if (data.allItems[type].length > 0) {
+
+                if (data.allItems[type].length > 0) {
                 ID = data.allItems[type][data.allItems[type].length - 1].id + 1;
             } else {
                 ID = 0;
             }
-            
+
+        
             // Create new item based on 'inc' or 'exp' type
             if (type === 'exp') {
                 newItem = new Expense(ID, des, val);
@@ -80,8 +81,157 @@ var budgetController = (function() {
             
             // Return the new element
             return newItem;
+            
         },
+
         
+        addItem1: function(type, des, val) {
+            var newItem, ID;
+            
+            //[1 2 3 4 5], next ID = 6
+            //[1 2 4 6 8], next ID = 9
+            // ID = last ID + 1
+            
+            // Create new ID
+
+                if (data.allItems[type].length > 0) {
+                ID = data.allItems[type][data.allItems[type].length - 1].id + 1;
+            } else {
+                ID = 0;
+            }
+
+        
+            // Create new item based on 'inc' or 'exp' type
+            if (type === 'exp') {
+                newItem = new Expense(ID, des, val);
+            } else if (type === 'inc') {
+                newItem = new Income(ID, des, val);
+            }
+            
+            // Push it into our data structure
+            data.allItems[type].push(newItem);
+            
+            // Return the new element
+            return newItem;
+            
+        },
+
+
+
+
+        save: function(){
+            var DOM = UIController.getDOMstrings();
+            $(DOM.saveBtn).click(function(){
+               
+                var income = document.querySelector(DOM.incomeLabel).textContent;
+                var expense = document.querySelector(DOM.expensesLabel).textContent;
+                var budget = document.querySelector(DOM.budgetLabel).textContent;
+                var expLabel = document.querySelector(DOM.percentageLabel).textContent;
+                var getItems = data.allItems;
+                var get=getItems;
+                console.log(getItems);
+                var itemInc, itemExp;
+                itemInc=getItems.inc.length;
+                itemExp=getItems.exp.length;        
+                var persExp = [];
+                var desExp = [];
+                var valExp = [];
+                var desInc = [];
+                var valInc = [];
+                console.log(getItems);
+                console.log(itemExp+""+itemInc);
+                get+=getItems;
+                for(var i=0; i<itemExp;i++){
+                        persExp.push(getItems.exp[i].percentage);
+                        desExp.push(getItems.exp[i].description);
+                        valExp.push(getItems.exp[i].value);
+                }
+                for(var i=0; i<itemInc;i++){
+                    desInc.push(getItems.inc[i].description);
+                    valInc.push(getItems.inc[i].value);
+            }
+                    if(income && expense && budget && getItems.exp && expLabel && persExp && getItems.inc && valExp && desExp && valInc && desInc){
+                            chrome.storage.sync.set({"income": income, "expense": expense, "budget": budget, "incItem": getItems.inc,"expItem": getItems.exp,
+                             "label": expLabel, "persanteges": persExp, "valuesExp": valExp, "descriptionsExp": desExp, "descriptionsInc": desInc, "valuesInc": valInc}, function(){
+                                });
+                                
+                    }
+                    alert("Saved!");
+            });
+        },
+
+        load: function(){
+            var DOM = UIController.getDOMstrings();
+            $(DOM.loadBtn).click(function(){
+
+                var load0 = UIController.getDOMstrings();
+                var load1 = "income";
+                var load2 = "expense";
+                var load3 = "budget";
+                var load4 = "incId";
+                var load5 = "incItem";
+                var load6 = "expItem";
+                var load7 = "label";
+                var load8 = "persanteges";
+                var loadDESexp = "descriptionsExp";
+                var loadVALexp = "valuesExp";
+                var loadDESinc = "descriptionsInc";
+                var loadVALinc = "valuesInc";
+
+                
+                    chrome.storage.sync.get(load1, function(val1){
+                       //console.log('Loaded1');
+                       //console.log(val1);
+                       document.querySelector(load0.incomeLabel).textContent = val1.income;
+                    });
+                    chrome.storage.sync.get(load2, function(val2){
+                        //console.log('Loaded2');
+                        //console.log(val2);
+                        document.querySelector(load0.expensesLabel).textContent = val2.expense;
+                    });
+                    chrome.storage.sync.get(load3, function(val3){
+                        //console.log('Loaded3');
+                        //console.log(val3);
+                        document.querySelector(load0.budgetLabel).textContent = val3.budget;
+                    });
+                    chrome.storage.sync.get(load4, function(val4){
+                        //console.log('Loaded4');
+                        //console.log(val4);
+                        document.querySelector(load0.incomeContainer).textContent = val4.incomeArea;
+                    });
+                    chrome.storage.sync.get(load7, function(val7){
+                        //console.log('Loaded7');
+                        //console.log(val7);
+                        document.querySelector(load0.percentageLabel).textContent = val7.label;
+                    });
+                    chrome.storage.sync.get(load5, function(val5){
+                        chrome.storage.sync.get(loadDESinc, function(val9){
+                            chrome.storage.sync.get(loadVALinc, function(val13){
+                                for(var i=0; i<val5.incItem.length; i++){
+                                    UIController.addListItem(val5.incItem[i], 'inc');
+                                    budgetController.addItem('inc', val9.descriptionsInc[i], val13.valuesInc[i]);                                            
+                                } 
+                            });
+                        });
+                    });
+                    chrome.storage.sync.get(load6, function(val6){ 
+                        chrome.storage.sync.get(loadDESexp, function(val11){ 
+                            chrome.storage.sync.get(loadVALexp, function(val12){                   
+                                for(var i=0; i<val6.expItem.length; i++){
+                                    UIController.addListItem(val6.expItem[i], 'exp');
+                                    budgetController.addItem('exp', val11.descriptionsExp[i], val12.valuesExp[i]);
+                                }
+                            });
+                        });                    
+                    });
+                    chrome.storage.sync.get(load8, function(val8){
+                        //console.log('Loaded8');
+                       // console.log(val8);
+                        UIController.displayPercentages(val8.persanteges);
+                    });
+            });
+        },
+
         
         deleteItem: function(type, id) {
             var ids, index;
@@ -183,10 +333,12 @@ var UIController = (function() {
         percentageLabel: '.budget__expenses--percentage',
         container: '.container',
         expensesPercLabel: '.item__percentage',
-        dateLabel: '.budget__title--month'
+        dateLabel: '.budget__title--month',
+        saveBtn: '#save__btn',
+        loadBtn: '#load__btn'
     };
     
-    
+
     var formatNumber = function(num, type) {
         var numSplit, int, dec, type;
         /*
@@ -253,81 +405,10 @@ var UIController = (function() {
             
             // Insert the HTML into the DOM
             document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
-        },
-        
-        save: function(){
-            $('#save__btn').click(function(){
-                var income = document.querySelector(DOMstrings.incomeLabel).textContent;
-                var expense = document.querySelector(DOMstrings.expensesLabel).textContent;
-                var budget = document.querySelector(DOMstrings.budgetLabel).textContent;
-                var incomeArea = document.querySelector(DOMstrings.incomeContainer).textContent;
-                var expenseArea = document.querySelector(DOMstrings.expensesContainer).textContent;
-                /*
-                var masiv = [];
-                var item = document.querySelector('.item.clearfix').textContent; 
-                masiv = item.split('.');
-                var descr;
-                descr = masiv[0];
-                var masiv1 = [];
-                masiv1 = descr.split(' ');
-                var el1 = masiv1[2];
-                el1 = parseInt(el1);
-                console.log(masiv1);
-                console.log(el1); 
-                //var newItem = budgetController.addItem(type, descr, va);
-                */
-                if(income && expense && budget && incomeArea && expenseArea){
-                    chrome.storage.sync.set({"income": income, "expense": expense, "budget": budget, "incomeArea": incomeArea, "expenseArea": expenseArea}, function(){
-                       alert('Saved');
-                       console.log(income + ' ' + expense + ' ' + budget);
-                    });
-                }
-            });
             
         },
-
-        load: function(){
-            $('#load__btn').click(function(){
-                var load1 = "income";
-                var load2 = "expense";
-                var load3 = "budget";
-                var load4 = "incomeArea";
-                var load5 = "expenseArea";
-
-                
-                    chrome.storage.sync.get(load1, function(val1){
-                       console.log('Loaded1');
-                       console.log(val1);
-                       document.querySelector(DOMstrings.incomeLabel).textContent = val1.income;
-                    });
-                    chrome.storage.sync.get(load2, function(val2){
-                        console.log('Loaded2');
-                        console.log(val2);
-                        document.querySelector(DOMstrings.expensesLabel).textContent = val2.expense;
-                    });
-                    chrome.storage.sync.get(load3, function(val3){
-                        console.log('Loaded3');
-                        console.log(val3);
-                        document.querySelector(DOMstrings.budgetLabel).textContent = val3.budget;
-                    });
-                    chrome.storage.sync.get(load4, function(val4){
-                        console.log('Loaded4');
-                        console.log(val4);
-                        document.querySelector(DOMstrings.incomeContainer).textContent = val4.incomeArea;
-                    });
-                    chrome.storage.sync.get(load5, function(val5){
-                        console.log('Loaded5');
-                        console.log(val5);
-                        document.querySelector(DOMstrings.expensesContainer).textContent = val5.expenseArea;
-                    });
-                    // chrome.storage.sync.get(loadV, function(){
-                    //      console.log('Loaded4');
-                    //      var newItem = budgetController.addItem('inc', loadD, loadV);
-                    //      UIController.addListItem(newItem, 'inc');
-                    // });
-            });
-        },
-
+        
+        
         
         deleteListItem: function(selectorID) {
             
@@ -427,7 +508,7 @@ var UIController = (function() {
 
 // GLOBAL APP CONTROLLER
 var controller = (function(budgetCtrl, UICtrl) {
-    
+   
     var setupEventListeners = function() {
         var DOM = UICtrl.getDOMstrings();
         
@@ -492,6 +573,7 @@ var controller = (function(budgetCtrl, UICtrl) {
             
             // 6. Calculate and update percentages
             updatePercentages();
+          
         }
     };
     
@@ -523,8 +605,8 @@ var controller = (function(budgetCtrl, UICtrl) {
         }
     };
     
-    UICtrl.save();
-    UICtrl.load();
+    budgetCtrl.save();
+    budgetCtrl.load();
     
     return {
         init: function() {
