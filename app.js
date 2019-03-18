@@ -185,14 +185,6 @@ var UIController = (function() {
         container: '.container',
         expensesPercLabel: '.item__percentage',
         dateLabel: '.budget__title--month',
-        german: '#german',
-        ukrainian: '#ukrainian',
-        english: '#english',
-        russian: '#russian',
-        chinese:'#chinese',
-        italian:'#italian',
-        french:'#french',
-        spanish:'#spanish',
         incomeText: '.budget__income--text',
         expenseText: '.budget__expenses--text',
         incomeBottom: '.icome__title',
@@ -201,52 +193,6 @@ var UIController = (function() {
         budgetD:'budget_title_month'
     };
 
-
-    var Language = function(income, expense, budget, placeholderDescription, placeholderValue) {
-        this.income = income;
-        this.expense = expense;
-        this.budget = budget;
-        this.placeholderDescription = placeholderDescription;
-        this.placeholderValue=placeholderValue;
-    };
-
-    var DOMgermany= new Language('Einkommen','Kosten','Verfügbares Budget in','beschreibung hinzufügen','Wert');
-    var DOMrussian = new Language('Доход','Расходы','Доступный Бюджет в','добавить описание','значение');
-    var DOMenglish = new Language('Income','Expenses','Available Budget in','add description','value');
-    var DOMukrainian = new Language('Дохід','Витрати','Доступний бюджет в','додати опис','значення');
-    var DOMchinese= new Language('收入','成本','可用預算','添加說明','意');
-    var DOMitalian= new Language('Reddito','Costi','Budget disponibile in','aggiungi una descrizione','senso');
-    var DOMspanish= new Language('Ingresos', 'Gastos', 'Presupuesto disponible en', 'Agregar descripción', 'Valor');
-    var DOMfrench = new Language('Revenu', 'Dépenses', 'Budget disponible dans', 'Ajouter une description', 'Valeur');
-
-   /* var DOMukrainian = {
-        income: 'Дохід',
-        expense: 'Витрати',
-        budget: 'Доступний Бюджет в',
-        placeholderDescription:'додати опис',
-        placeholderValue:'значення'
-    };
-    var DOMrussian = {
-        income: 'Доход',
-        expense: 'Расходы',
-        budget: 'Доступный Бюджет в',
-        placeholderDescription:'добавить описание',
-        placeholderValue:'значение'
-    };
-    var DOMenglish = {
-        income: 'Income',
-        expense: 'Expenses',
-        budget: 'Available Budget in',
-        placeholderDescription:'add description',
-        placeholderValue:'value'
-    };*/
-   /* var DOMgermany = {
-        income: 'Einkommen',
-        expense: 'Kosten',
-        budget: 'Verfügbares Budget in',
-        placeholderDescription: 'beschreibung hinzufügen',
-        placeholderValue:'Wert'
-    };*/
     
     
     var formatNumber = function(num, type) {
@@ -283,15 +229,6 @@ var UIController = (function() {
         }
     };
     
-    var getLang=function(obj){
-        document.querySelector(DOMstrings.incomeText).textContent = obj.income;
-        document.querySelector(DOMstrings.expenseText).textContent = obj.expense;
-        document.querySelector(DOMstrings.incomeBottom).textContent = obj.income;
-        document.querySelector(DOMstrings.expenseBottom).textContent = obj.expense;
-        document.querySelector(DOMstrings.budgetText).textContent = obj.budget;
-        document.getElementsByName('description')[0].placeholder=obj.placeholderDescription;
-        document.getElementsByName('value')[0].placeholder=obj.placeholderValue;
-       };
     
     return {
         getInput: function() {
@@ -431,102 +368,7 @@ var UIController = (function() {
         
         
 
-
-           
-
-        languageSupp: function(){
-            document.querySelector(DOMstrings.german).addEventListener('click', function(){
-                
-                getLang(DOMgermany);
-                UIController.displayMonth(DOMgermany.budget);
-
-            })
-            document.querySelector(DOMstrings.english).addEventListener('click', function(){
-               
-                getLang(DOMenglish);
-                UIController.displayMonth(DOMenglish.budget);
-                
-            })
-            document.querySelector(DOMstrings.ukrainian).addEventListener('click', function(){
-                
-                getLang(DOMukrainian);
-                UIController.displayMonth(DOMukrainian.budget);
-                
-            })
-
-            document.querySelector(DOMstrings.italian).addEventListener('click', function(){
-                
-                getLang(DOMitalian);
-                UIController.displayMonth(DOMitalian.budget);
-                
-            })
-            
-            document.querySelector(DOMstrings.spanish).addEventListener('click', function(){
-                
-                getLang(DOMspanish);
-                UIController.displayMonth(DOMspanish.budget);
-                
-            })
-            document.querySelector(DOMstrings.french).addEventListener('click', function(){
-                
-                getLang(DOMfrench);
-                UIController.displayMonth(DOMfrench.budget);
-                
-            })
-            document.querySelector(DOMstrings.chinese).addEventListener('click', function(){
-                
-                getLang(DOMchinese);
-                UIController.displayMonth(DOMchinese.budget);
-
-            })
-
-            document.querySelector(DOMstrings.russian).addEventListener('click', function(){
-                
-                getLang(DOMrussian);
-                UIController.displayMonth(DOMrussian.budget);
-            })
-
-
-        },
-        
-
-    /*lanG:function() {
-document.write(navigator.languages);
-    }, */
-    
-    browserLang: function(){
-          
-            x=navigator.language;
-            y=navigator.languages;
-           console.log(y);
-           console.log(x);
-           switch(x){
-
-               case'uk':
-               getLang(DOMukrainian);
-               UIController.displayMonth(DOMukrainian.budget);
-               break;
-        
-               case'ru':
-               getLang(DOMrussian);
-               UIController.displayMonth(DOMrussian.budget);
-               break;
-
-               case'de':
-               getLang(DOMgermany);
-               UIController.displayMonth(DOMgermany.budget);
-               break;
-               
-               default:
-               getLang(DOMenglish);
-               UIController.displayMonth(DOMenglish.budget);
-
-           }
-        },
-        
-           
-
-        changedType: function() {
+changedType: function() {
             
             var fields = document.querySelectorAll(
                 DOMstrings.inputType + ',' +
@@ -552,11 +394,119 @@ document.write(navigator.languages);
 
 
 
+var langController=(function(){
+
+
+    var DOMstrings = {
+        incomeText: '.budget__income--text',
+        expenseText: '.budget__expenses--text',
+        incomeBottom: '.icome__title',
+        expenseBottom: '.expenses__title',
+        budgetText: '.budget__title',
+        german: '#german',
+        ukrainian: '#ukrainian',
+        english: '#english',
+        russian: '#russian',
+        chinese:'#chinese',
+        italian:'#italian',
+        french:'#french',
+        spanish:'#spanish'
+    };
+
+    var Language = function(income, expense, budget, placeholderDescription, placeholderValue)
+    {
+        this.income = income;
+        this.expense = expense;
+        this.budget = budget;
+        this.placeholderDescription = placeholderDescription;
+        this.placeholderValue=placeholderValue;
+    };
+
+
+    var DOMlang= 
+    {
+     DOMgermany: new Language('Einkommen','Kosten','Verfügbares Budget in','beschreibung hinzufügen','Wert'),
+     DOMrussian: new Language('Доход','Расходы','Доступный Бюджет в','добавить описание','значение'),
+     DOMenglish: new Language('Income','Expenses','Available Budget in','add description','value'),
+     DOMukrainian: new Language('Дохід','Витрати','Доступний бюджет в','додати опис','значення'),
+     DOMchinese: new Language('收入','成本','可用預算','添加說明','意'),
+     DOMitalian: new Language('Reddito','Costi','Budget disponibile in','aggiungi una descrizione','senso'),
+     DOMspanish: new Language('Ingresos', 'Gastos', 'Presupuesto disponible en', 'Agregar descripción', 'Valor'),
+     DOMfrench: new Language('Revenu', 'Dépenses', 'Budget disponible dans', 'Ajouter une description', 'Valeur')
+
+    }
+
+return{
+
+
+
+     getLang:function(obj)
+     {
+        document.querySelector(DOMstrings.incomeText).textContent = obj.income;
+        document.querySelector(DOMstrings.expenseText).textContent = obj.expense;
+        document.querySelector(DOMstrings.incomeBottom).textContent = obj.income;
+        document.querySelector(DOMstrings.expenseBottom).textContent = obj.expense;
+        document.querySelector(DOMstrings.budgetText).textContent = obj.budget;
+        document.getElementsByName('description')[0].placeholder=obj.placeholderDescription;
+        document.getElementsByName('value')[0].placeholder=obj.placeholderValue;
+       },
+
+  browserLang: function()
+  {
+        var x;
+        x=navigator.language;
+    //     y=navigator.languages;
+    //    console.log(y);
+    //    console.log(x);
+       switch(x){
+
+           case'uk':
+           langController.getLang(DOMlang.DOMukrainian);
+           UIController.displayMonth(DOMlang.DOMukrainian.budget);
+           break;
+    
+           case'ru':
+           langController.getLang(DOMlang.DOMrussian);
+           UIController.displayMonth(DOMlang.DOMrussian.budget);
+           break;
+
+           case'de':
+           langController.getLang(DOMlang.DOMgermany);
+           UIController.displayMonth(DOMlang.DOMgermany.budget);
+           break;
+           
+           default:
+           langController.getLang(DOMlang.DOMenglish);
+           UIController.displayMonth(DOMlang.DOMenglish.budget);
+
+       }
+    },
+
+    getDOMstringsLang: function() 
+    {
+        return DOMstrings;
+    },
+
+    getLanguages: function()
+    {
+        return DOMlang;
+    }
+
+}
+}());
+
+
+
 // GLOBAL APP CONTROLLER
-var controller = (function(budgetCtrl, UICtrl) {
+var controller = (function(budgetCtrl, UICtrl, langCtrl) {
+
+
+   
     
     var setupEventListeners = function() {
         var DOM = UICtrl.getDOMstrings();
+        var DOM1=langCtrl.getDOMstringsLang();
+        var DOM2=langCtrl.getLanguages();
         
         document.querySelector(DOM.inputBtn).addEventListener('click', ctrlAddItem);
 
@@ -568,10 +518,59 @@ var controller = (function(budgetCtrl, UICtrl) {
         
         document.querySelector(DOM.container).addEventListener('click', ctrlDeleteItem);
         
-        document.querySelector(DOM.inputType).addEventListener('change', UICtrl.changedType);        
+        document.querySelector(DOM.inputType).addEventListener('change', UICtrl.changedType);   
+
+    document.querySelector(DOM1.german).addEventListener('click', function(){
+        AddLang(DOM2.DOMgermany, DOM2.DOMgermany.budget);
+    });
+
+    document.querySelector(DOM1.english).addEventListener('click', function()
+    {
+        AddLang(DOM2.DOMenglish, DOM2.DOMenglish.budget);
+    });
+    
+    document.querySelector(DOM1.ukrainian).addEventListener('click', function()
+    {
+        AddLang(DOM2.DOMukrainian, DOM2.DOMukrainian.budget);
+    });
+
+    document.querySelector(DOM1.italian).addEventListener('click', function()
+    {
+        AddLang(DOM2.DOMitalian, DOM2.DOMitalian.budget);
+    });
+    
+    document.querySelector(DOM1.spanish).addEventListener('click', function()
+    {
+        AddLang(DOM2.DOMspanish, DOM2.DOMspanish.budget);
+    });
+
+    document.querySelector(DOM1.french).addEventListener('click', function()
+    {
+        AddLang(DOM2.DOMfrench, DOM2.DOMfrench.budget);
+    });
+
+    document.querySelector(DOM1.chinese).addEventListener('click', function()
+    {
+        AddLang(DOM2.DOMchinese, DOM2.DOMchinese.budget);
+    });
+
+    document.querySelector(DOM1.russian).addEventListener('click', function()
+    {
+        AddLang(DOM2.DOMrussian, DOM2.DOMrussian.budget);
+    });
+       
     };
 
     
+    var AddLang = function(lang,landBudget){
+       
+        langCtrl.getLang(lang);
+       
+        UICtrl.displayMonth(landBudget);
+
+   };
+
+
     var updateBudget = function() {
         
         // 1. Calculate the budget
@@ -584,10 +583,7 @@ var controller = (function(budgetCtrl, UICtrl) {
         UICtrl.displayBudget(budget);
     };
 
-    //UICtrl.languageSupp();
 
-    
-    
     var updatePercentages = function() {
         
         // 1. Calculate percentages
@@ -599,6 +595,7 @@ var controller = (function(budgetCtrl, UICtrl) {
         // 3. Update the UI with the new percentages
         UICtrl.displayPercentages(percentages);
     };
+
     
     
     var ctrlAddItem = function() {
@@ -658,19 +655,20 @@ var controller = (function(budgetCtrl, UICtrl) {
         init: function() {
             console.log('Application has started.');
             //UICtrl.displayMonth('Available Budget in');
-            UICtrl.languageSupp();
+            //langController.languageSupp();
             UICtrl.displayBudget({
                 budget: 0,
                 totalInc: 0,
                 totalExp: 0,
                 percentage: -1
             });
+            langController.browserLang();
             setupEventListeners();
-            UICtrl.browserLang();
+            
         }
     };
     
-})(budgetController, UIController);
+})(budgetController, UIController, langController);
 
 
 controller.init();
