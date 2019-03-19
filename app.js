@@ -128,8 +128,6 @@ var budgetController = (function() {
                 var budget = document.querySelector(DOM.budgetLabel).textContent;
                 var expLabel = document.querySelector(DOM.percentageLabel).textContent;
                 var getItems = data.allItems;
-                var get=getItems;
-                console.log(getItems);
                 var itemInc, itemExp;
                 itemInc=getItems.inc.length;
                 itemExp=getItems.exp.length;        
@@ -138,8 +136,6 @@ var budgetController = (function() {
                 var valExp = [];
                 var desInc = [];
                 var valInc = [];
-                console.log(getItems);
-                console.log(itemExp+""+itemInc);
                 get+=getItems;
                 for(var i=0; i<itemExp;i++){
                         persExp.push(getItems.exp[i].percentage);
@@ -180,28 +176,18 @@ var budgetController = (function() {
 
                 
                     chrome.storage.sync.get(load1, function(val1){
-                       //console.log('Loaded1');
-                       //console.log(val1);
                        document.querySelector(load0.incomeLabel).textContent = val1.income;
                     });
                     chrome.storage.sync.get(load2, function(val2){
-                        //console.log('Loaded2');
-                        //console.log(val2);
                         document.querySelector(load0.expensesLabel).textContent = val2.expense;
                     });
                     chrome.storage.sync.get(load3, function(val3){
-                        //console.log('Loaded3');
-                        //console.log(val3);
                         document.querySelector(load0.budgetLabel).textContent = val3.budget;
                     });
                     chrome.storage.sync.get(load4, function(val4){
-                        //console.log('Loaded4');
-                        //console.log(val4);
                         document.querySelector(load0.incomeContainer).textContent = val4.incomeArea;
                     });
                     chrome.storage.sync.get(load7, function(val7){
-                        //console.log('Loaded7');
-                        //console.log(val7);
                         document.querySelector(load0.percentageLabel).textContent = val7.label;
                     });
                     chrome.storage.sync.get(load5, function(val5){
@@ -225,8 +211,6 @@ var budgetController = (function() {
                         });                    
                     });
                     chrome.storage.sync.get(load8, function(val8){
-                        //console.log('Loaded8');
-                       // console.log(val8);
                         UIController.displayPercentages(val8.persanteges);
                     });
             });
