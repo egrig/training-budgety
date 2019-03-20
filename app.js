@@ -189,8 +189,7 @@ var UIController = (function() {
         expenseText: '.budget__expenses--text',
         incomeBottom: '.icome__title',
         expenseBottom: '.expenses__title',
-        budgetText: '.budget__title',
-        budgetD:'budget_title_month'
+        budgetText: '.budget__title'
     };
 
     
@@ -455,9 +454,6 @@ return{
   {
         var x;
         x=navigator.language;
-    //     y=navigator.languages;
-    //    console.log(y);
-    //    console.log(x);
        switch(x){
 
            case'uk':
