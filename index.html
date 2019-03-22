@@ -1,14 +1,11 @@
 <!DOCTYPE html>
+<html lang="en">
     <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Voice Controlled Notes App</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shoelace-css/1.0.0-beta16/shoelace.css">
-        <link rel="stylesheet" href="styles.css">
-
+        <meta charset="UTF-8">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:100,300,400,600" rel="stylesheet" type="text/css">
+        <link href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css">
+        <link type="text/css" rel="stylesheet" href="style.css">
+        <title>Budgety</title>
     </head>
     <body>
         
@@ -47,22 +44,14 @@
                         <option value="inc" selected>+</option>
                         <option value="exp">-</option>
                     </select>
-                    <input type="text"  name="description" class="add__description" placeholder="Add description">
-                    <input type="number" name="value" class="add__value" placeholder="Value">
+                    <input type="text" class="add__description" placeholder="Add description" maxlength="25">
+                    <input type="number" class="add__value" placeholder="Value" min = "0" max = "999999" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    type = "number"
+                    maxlength = "6" onkeydown="javascript: return event.keyCode == 69 ? false : true" required />
 
-                    <button class="add__btn"><i class="ion-ios-checkmark-outline"></i></button>
-                  
-                    <button id="german" class="add__btn"><img src="germany.gif"  title="German" alt="German"></button>
-                    <button id="ukrainian" class="add__btn"><img src="ukrainian.jpg" title="Ukrainian" alt="Ukrainian"></button>
-                    <button id="english" class="add__btn"><img src="english.jpg" title="English" alt="English"></button> 
-                    <button id="russian" class="add__btn"><img src="russian.gif" title="Russian" alt="Russian"></button>
-                    <button id="italian" class="add__btn"><img src="italian.gif" title="Italian" alt="Italian"></button>
-                    <button id="french" class="add__btn"><img src="french.png"  title="French" alt="French"></button>
-                    <button id="spanish" class="add__btn"><img src="spanish.jpg"  title="Spanish" alt="Spanish"></button>
-                    <button id="chinese" class="add__btn"><img src="chinise.gif" title="Chinese" alt="Chinese"></button>
-                    <button id='save__btn' class="add__btn"><i class="ion-ios-cloud-download"></i></button>
-                    <button id='load__btn' class="add__btn"><i class="ion-ios-cloud-upload"></i></button>
-
+                    <button id="start-record-btn" title="Start Recording" class="add__btn1"><i class="ion-ios-mic"></i></button>
+                    <button id="pause-record-btn" title="Pause Recording" class="add__btn1"><i class="ion-ios-pause-outline"></i></button>
+                    <button id="add__btn" class="add__btn"><i class="ion-ios-checkmark-outline"></i></button>
                 </div>
             </div>
             
@@ -70,7 +59,7 @@
                 <div class="income">
                     <h2 class="income__title">Income</h2>
                     
-                    <div class="income__list clearfix">
+                    <div class="income__list">
                        
                         <!--
                         <div class="item clearfix" id="income-0">
@@ -133,11 +122,10 @@
                     </div>
                 </div>
             </div>
-
+            
+            
         </div>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="jquery-3.3.1.min.js"></script>
         <script src="app.js"></script>
     </body>
 </html>
-
-
