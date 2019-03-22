@@ -66,6 +66,7 @@ var budgetController = (function() {
             } else {
                 ID = 0;
             }
+
             // Create new item based on 'inc' or 'exp' type
             if (type === 'exp') {
                 newItem = new Expense(ID, des, val);
@@ -103,16 +104,14 @@ var budgetController = (function() {
             } else if (type === 'inc') {
                 newItem = new Income(ID, des, val);
             }
-            
+
             // Push it into our data structure
             data.allItems[type].push(newItem);
             
             // Return the new element
+
             return newItem;        
         },
-
-
-
 
         save: function(){
             var DOM = UIController.getDOMstrings();
@@ -312,6 +311,9 @@ var UIController = (function() {
         container: '.container',
         expensesPercLabel: '.item__percentage',
         dateLabel: '.budget__title--month',
+        startRec: '#start-record-btn',
+        stopRec: '#pause-record-btn',
+        addBtn: '#add__btn'
         incomeText: '.budget__income--text',
         expenseText: '.budget__expenses--text',
         incomeBottom: '.icome__title',
@@ -320,9 +322,6 @@ var UIController = (function() {
         saveBtn: '#save__btn',
         loadBtn: '#load__btn'
     };
-    
-
-    
     
     var formatNumber = function(num, type) {
         var numSplit, int, dec, type;
@@ -492,8 +491,6 @@ var UIController = (function() {
                 document.querySelector(DOMstrings.dateLabel).textContent =obj+' '+ monthsEng[month] + ' ' + year;
         },
         
-        
-
 changedType: function() {
             
             var fields = document.querySelectorAll(
@@ -514,9 +511,144 @@ changedType: function() {
             return DOMstrings;
         }
     };
-    
 })();
 
+var SpeechController = (function(){
+    var DOM = UIController.getDOMstrings();
+    var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    var recognition = new SpeechRecognition();
+    var noteContent = '';
+    recognition.continuous = true;
+    recognition.onresult = function(event) {
+        var current = event.resultIndex;
+        var transcript = event.results[current][0].transcript;
+        var mobileRepeatBug = (current == 1 && transcript == event.results[0][0].transcript);
+        if(!mobileRepeatBug) {
+            noteContent += transcript;
+            description();
+        }
+    };
+
+    var description = function(){
+  
+        var splits = noteContent.split(' ');
+        console.log(splits);
+        
+        if(splits[0] == 'описание' && splits[splits.length-1] == 'стоп'){
+          delete splits[0];
+          delete splits[splits.length-1];
+          var splits1 = splits.join(' ');
+          document.querySelector(DOM.inputDescription).value = splits1;
+          noteContent = '';
+        }else if (splits[0] == 'description' && splits[1] == 'is' && splits[splits.length-2] == 'description' && splits[splits.length-1] == 'ends'){
+          delete splits[0];
+          delete splits[1];
+          delete splits[splits.length-2];
+          delete splits[splits.length-1];
+          var splits1 = splits.join(' ');
+          document.querySelector(DOM.inputDescription).value = splits1;
+          noteContent = '';
+        }else if (noteContent == 'income' || noteContent == 'доход'){
+          $(DOM.inputType).val('inc');
+          noteContent = "";
+        }else if (noteContent == 'expense' || noteContent == 'расход') {
+          $(DOM.inputType).val('exp');
+          noteContent = ""; 
+        }else if(splits[0] == 'Love'|| splits[0] == 'love'|| splits[0] == 'value'|| splits[0] == 'белью' || splits[0] == 'вильнюс' || splits[0] == 'велью' || splits[0] == 'you'|| splits[0] == 'жду'){
+            
+        delete splits[0];
+        var splits2=splits.splice(0,1);
+        console.log(splits);
+        console.log(splits2);
+       // console.log(splits.length);
+        var splits3=[];
+        for(var i=0; i<splits.length;i++){
+         splits3.push(splits[i].toLowerCase());
+        }
+        console.log(splits3);
+        //var splits1 = parseInt(splits.join(' '));          
+        var numbers=["one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen"];
+        var twoNumbers=["twenty","thirty","fourty","fifty","sixty","seventy","eighty","ninety"];
+        var x;
+        var y;
+        var k=0;
+        var l=0;
+        for(var i=0; i<splits3.length;i++)
+         {
+            for(var j=0;j<numbers.length;j++)
+            {
+                if (splits3[i]==numbers[j])
+                 {
+                    splits3[i]=numbers.indexOf(numbers[j])+1;
+                    parseInt(splits3[i]);
+                    x=splits3[i];
+                    console.log("x:"+x);
+                    k++;
+                 
+                 }
+            }
+         }
+
+         for(var i=0; i<splits3.length;i++)
+         {
+            for(var j=0;j<twoNumbers.length;j++)
+            {
+
+             if (splits3[i]==twoNumbers[j])
+             {
+         
+            splits3[i]=twoNumbers.indexOf(twoNumbers[j])+2+'0';
+            parseInt(splits3[i]);
+            y=splits3[i];
+            console.log("y:"+y);
+            l++;
+             }
+            }
+            
+         }
+         if(k>0 && k<2 && l>0 && l<2)
+                {
+                   z=parseInt(y)+parseInt(x);
+                   console.log("z:"+z);
+                   splits3=z;
+                }
+                
+        console.log(splits3);
+        document.querySelector(DOM.inputValue).value = splits3;
+        noteContent = '';
+        }else if(splits[0] == 'цена'){
+          delete splits[0];
+          var splits1 = parseInt(splits.join(' '));
+          document.querySelector(DOM.inputValue).value = splits1;
+          noteContent = '';
+        }else if(splits[0] == 'clear' && splits[1] == 'description' || splits[0] == 'очистить' && splits[1] == 'описание') {
+          delete splits[0];
+          delete splits[1];
+          document.querySelector(DOM.inputDescription).value = '';
+          noteContent = '';
+        }else if(splits[0] == 'clear' && splits[1] == 'value' || splits[0] == 'очистить' && splits[1] == 'цену'){
+          delete splits[0];
+          delete splits[1];
+          document.querySelector(DOM.inputValue).value = '';
+          noteContent = '';
+        }else if(splits[0] == 'submit' || splits[0] == 'добавить'){
+          delete splits[0];
+          document.querySelector(DOM.addBtn).click();
+          noteContent = '';
+        }else{
+          noteContent = '';
+        }
+      };
+      return {
+          getContent: function(){
+              return noteContent;
+          },
+
+          getRecognition: function(){
+            return recognition;
+        }
+      }
+})();
 
 var langController=(function(){
 
@@ -619,15 +751,13 @@ return{
 
 
 // GLOBAL APP CONTROLLER
-var controller = (function(budgetCtrl, UICtrl, langCtrl) {
-
-
-   
-    
+var controller = (function(budgetCtrl, UICtrl, langCtrl, SpeechCtrl) {
     var setupEventListeners = function() {
         var DOM = UICtrl.getDOMstrings();
         var DOM1=langCtrl.getDOMstringsLang();
         var DOM2=langCtrl.getLanguages();
+         var getNoteContent = SpeechCtrl.getContent();
+    var getRec = SpeechCtrl.getRecognition();
         
         document.querySelector(DOM.inputBtn).addEventListener('click', ctrlAddItem);
 
@@ -638,7 +768,20 @@ var controller = (function(budgetCtrl, UICtrl, langCtrl) {
         });
         
         document.querySelector(DOM.container).addEventListener('click', ctrlDeleteItem);
-
+        
+        document.querySelector(DOM.inputType).addEventListener('change', UICtrl.changedType);
+        document.querySelector(DOM.startRec).addEventListener('click', function() {
+            if (getNoteContent.length) {
+              getNoteContent += ' ';
+            }
+            getRec.start(); 
+        });
+          
+        document.querySelector(DOM.stopRec).addEventListener('click', function() {
+            getRec.stop();
+        });
+    };
+    
         document.querySelector(DOM.inputType).addEventListener('change', UICtrl.changedType);   
 
     document.querySelector(DOM1.german).addEventListener('click', function(){
@@ -700,7 +843,8 @@ var controller = (function(budgetCtrl, UICtrl, langCtrl) {
         // 3. Display the budget on the UI
         UICtrl.displayBudget(budget);
     };
-
+    
+    
     var updatePercentages = function() {
         
         // 1. Calculate percentages
@@ -711,7 +855,7 @@ var controller = (function(budgetCtrl, UICtrl, langCtrl) {
         
         // 3. Update the UI with the new percentages
         UICtrl.displayPercentages(percentages);
-    };    
+    };
     
     var ctrlAddItem = function() {
         var input, newItem;
@@ -734,11 +878,9 @@ var controller = (function(budgetCtrl, UICtrl, langCtrl) {
             
             // 6. Calculate and update percentages
             updatePercentages();
-
         }
     };
-    
-    
+
     var ctrlDeleteItem = function(event) {
         var itemID, splitID, type, ID;
         
@@ -783,6 +925,7 @@ var controller = (function(budgetCtrl, UICtrl, langCtrl) {
             
         }
     };
-})(budgetController, UIController, langController);
+    
+})(budgetController, UIController, SpeechController, langController);
 
 controller.init();
