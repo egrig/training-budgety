@@ -2,6 +2,8 @@
 *** GENERAL
 **********************************************/
 
+div.content { width: 1000px }
+
 * {
     margin: 0;
     padding: 0;

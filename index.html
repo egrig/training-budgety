@@ -8,7 +8,7 @@
         <title>Budgety</title>
     </head>
     <body>
-        
+        <div class="content">
         <div class="top">
             <div class="budget">
                 <div class="budget__title">
@@ -46,9 +46,11 @@
                     </select>
 
                     <input type="text" name="description" class="add__description" placeholder="Add description" maxlength="25">
-                    <input type="number" name="value" class="add__value" placeholder="Value" min = "0" max = "999999" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-                    type = "number"
-                    maxlength = "6" onkeydown="javascript: return event.keyCode == 69 ? false : true" required />
+                    <!-- <input type="number" name="value" class="add__value" placeholder="Value" min = "0" max = "999999" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    type = "number" maxlength = "6" onkeydown="javascript: return event.keyCode == 69 ? false : true" required />
+                    -->
+                    
+                    <input type="number" name="value" class="add__value" placeholder="Value" maxlength = "6" >
 
                     <button id="start-record-btn" title="Start Recording" class="add__btn1"><i class="ion-ios-mic"></i></button>
                     <button id="pause-record-btn" title="Pause Recording" class="add__btn1"><i class="ion-ios-pause-outline"></i></button>
@@ -137,6 +139,7 @@
             
             
         </div>
+    </div>
         <script src="jquery-3.3.1.min.js"></script>
         <script src="app.js"></script>
     </body>
