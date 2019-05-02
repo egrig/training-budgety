@@ -80,7 +80,6 @@ var budgetController = (function() {
             // Return the new element
             return newItem;            
         },
-
         
         addItem1: function(type, des, val) {
             var newItem, ID;
@@ -112,7 +111,7 @@ var budgetController = (function() {
 
             return newItem;        
         },
-
+/*
         save: function(){
             var DOM = UIController.getDOMstrings();
             $(DOM.saveBtn).click(function(){
@@ -141,7 +140,7 @@ var budgetController = (function() {
                     valInc.push(getItems.inc[i].value);
             }
                     if(income && expense && budget && getItems.exp && expLabel && persExp && getItems.inc && valExp && desExp && valInc && desInc){
-                        //console.log(income, expense, budget, getItems.inc, getItems.exp, expLabel, persExp, valExp, desExp, desInc, valInc);
+                        console.log(income, expense, budget, getItems.inc, getItems.exp, expLabel, persExp, valExp, desExp, desInc, valInc);
                         chrome.storage.sync.set({"income": income, "expense": expense, "budget": budget, "incItem": getItems.inc,"expItem": getItems.exp,
                              "label": expLabel, "persanteges": persExp, "valuesExp": valExp, "descriptionsExp": desExp, "descriptionsInc": desInc, "valuesInc": valInc}, function(){
                                 });
@@ -150,7 +149,9 @@ var budgetController = (function() {
                     alert("Saved!");
             });
         },
+*/
 
+/*
         load: function(){
             var DOM = UIController.getDOMstrings();
             $(DOM.loadBtn).click(function(){
@@ -210,7 +211,7 @@ var budgetController = (function() {
                     });
             });
         },
-        
+        */
         deleteItem: function(type, id) {
             var ids, index;
             
@@ -287,6 +288,14 @@ var budgetController = (function() {
         
         testing: function() {
             console.log(data);
+        },
+
+        getData: function() {
+            return data;
+        },
+
+        setData: function(saveData) {
+            data = saveData;
         }
     };
     
@@ -641,11 +650,11 @@ var SpeechController = (function(){
         }
       };
       return {
-          getContent: function(){
-              return noteContent;
-          },
+        getContent: function(){
+            return noteContent;
+        },
 
-          getRecognition: function(){
+        getRecognition: function(){
             return recognition;
         }
       }
@@ -772,15 +781,18 @@ var controller = (function(budgetCtrl, UICtrl, SpeechCtrl, langCtrl) {
         document.querySelector(DOM.startRec).addEventListener('click', function() {
             if (getNoteContent.length) {
                 getNoteContent += ' ';
+                console.log("adding note content: " + getNoteContent)
             }
             getRec.start(); 
+            console.log("Start recording button clicked.")
         });
             
         document.querySelector(DOM.stopRec).addEventListener('click', function() {
             getRec.stop();
+            console.log("Stop recording button clicked.")
         });
     
-        document.querySelector(DOM.inputType).addEventListener('change', UICtrl.changedType);   
+        //document.querySelector(DOM.inputType).addEventListener('change', UICtrl.changedType);   
 
         document.querySelector(DOM1.german).addEventListener('click', function() {
             AddLang(DOM2.DOMgermany, DOM2.DOMgermany.budget);
@@ -896,9 +908,57 @@ var controller = (function(budgetCtrl, UICtrl, SpeechCtrl, langCtrl) {
             updatePercentages();
         }
     };
-    
-    budgetCtrl.save();
-    budgetCtrl.load();
+
+    var save = function() {
+        var DOM = UIController.getDOMstrings();
+        $(DOM.saveBtn).click(function(){
+            chrome.storage.sync.set({savedDataObj: budgetCtrl.getData()},  function(){
+                console.log('Saved data object.');
+            });
+        });
+    };
+
+    var load = function() {
+        var DOM = UIController.getDOMstrings();
+        $(DOM.loadBtn).click(function(){
+
+            chrome.storage.sync.get(['savedDataObj'], function(dataObj){
+                if(Object.keys(dataObj).length === 0 && dataObj.constructor === Object){
+                    alert("No entry present in storage");
+                } else {
+                    for (index = 0; index < dataObj.savedDataObj.allItems['exp'].length; index++) {
+                        budgetCtrl.deleteItem('exp', dataObj.savedDataObj.allItems['exp'][index].id);
+                        console.log('exp- ' + index + ' ' + dataObj.savedDataObj.allItems['exp'][index].id);
+                            }
+
+                    $(DOM.expensesContainer).empty();
+
+                    for (index = 0; index < dataObj.savedDataObj.allItems['inc'].length; index++) {
+                        budgetCtrl.deleteItem('inc', dataObj.savedDataObj.allItems['inc'][index].id);
+                        console.log('inc- ' + index + ' ' + dataObj.savedDataObj.allItems['exp'][index].id);
+                    }
+                    $(DOM.incomeContainer).empty();
+
+                    for (index = 0; index < dataObj.savedDataObj.allItems['exp'].length; index++) {
+                        newItem = budgetCtrl.addItem('exp', dataObj.savedDataObj.allItems['exp'][index].description, dataObj.savedDataObj.allItems['exp'][index].value);            
+                        UICtrl.addListItem(newItem, 'exp');
+                        updateBudget();
+                        updatePercentages();
+                    }
+
+                    for (index = 0; index < dataObj.savedDataObj.allItems['inc'].length; index++) {
+                        newItem = budgetCtrl.addItem('inc', dataObj.savedDataObj.allItems['inc'][index].description, dataObj.savedDataObj.allItems['inc'][index].value);            
+                        UICtrl.addListItem(newItem, 'inc');
+                        updateBudget();
+                        updatePercentages();
+                    }
+                }
+        });
+        });
+    };
+
+    save();
+    load();
     
     return {
         init: function() {
@@ -912,7 +972,6 @@ var controller = (function(budgetCtrl, UICtrl, SpeechCtrl, langCtrl) {
             });
             langController.browserLang();
             setupEventListeners();
-            
         }
     };
     
